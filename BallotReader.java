@@ -10,8 +10,7 @@ public class BallotReader
 	public static Ballot readBallot(String filename)
 	throws IOException
 	{
-		// ***Replace this with the correct implementation; for now, it's
-		//    always returning a hard-coded ballot with three candidates
+
 		Scanner scanner = new Scanner(new FileReader(filename));
 		String officeName = scanner.nextLine();
 		Ballot ballot = new Ballot(officeName);
