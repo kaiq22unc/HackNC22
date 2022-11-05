@@ -75,7 +75,17 @@ public class BallotDialog extends JDialog
 					castVote();
 				}
 			});
+		JButton addButton = new JButton("Add");
+		addButton.addActionListener(
+				new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						addCandidate("aaa", "bbb");
+					}
+				}
+		);
 		add(castVoteButton);
+		add(addButton);
 		contentLayout.setConstraints(
 			castVoteButton,
 			new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
@@ -114,5 +124,10 @@ public class BallotDialog extends JDialog
 					JOptionPane.INFORMATION_MESSAGE);
 			}
 		}
+	}
+
+	public void addCandidate(String name, String Aff){
+		Candidate c = new Candidate(name, Aff);
+
 	}
 }
