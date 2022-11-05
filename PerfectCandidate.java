@@ -1,6 +1,4 @@
- 
-// YOU ARE NOT REQUIRED TO FULLY UNDERSTAND THIS CODE; READ IT BUT YOU MAY NOT
-// MODIFY IT.
+
 
 import java.io.IOException;
 import javax.swing.JOptionPane;
@@ -39,6 +37,9 @@ public class PerfectCandidate
 			}
 		}
 		while (ballot == null);
+
+		AddDialog ad = new AddDialog(null, ballot);
+		ad.setVisible(true);
 
 		BallotDialog bf = new BallotDialog(null, ballot);
 		bf.setVisible(true);

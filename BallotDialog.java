@@ -1,6 +1,4 @@
 
-// YOU ARE NOT REQUIRED TO READ OR UNDERSTAND THIS CODE; YOU MAY NOT
-// MODIFY IT.
 
 import java.awt.*;
 import java.awt.event.*;
@@ -75,17 +73,7 @@ public class BallotDialog extends JDialog
 					castVote();
 				}
 			});
-		JButton addButton = new JButton("Add");
-		addButton.addActionListener(
-				new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						addCandidate("aaa", "bbb");
-					}
-				}
-		);
 		add(castVoteButton);
-		add(addButton);
 		contentLayout.setConstraints(
 			castVoteButton,
 			new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
@@ -126,8 +114,4 @@ public class BallotDialog extends JDialog
 		}
 	}
 
-	public void addCandidate(String name, String Aff){
-		Candidate c = new Candidate(name, Aff);
-
-	}
 }
