@@ -4,96 +4,106 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Objects;
 
-public class AddDialog extends JDialog{
+public class AddDialog extends JDialog {
 
-        private JList<Object> choiceList;
+  JTextField txtInput = new JTextField("");
+  private JList<Object> choiceList;
 
+  public AddDialog(Frame owner, Ballot ballot) {
+    super(owner, "More Candidates?", true);
 
-        public AddDialog(Frame owner, Ballot ballot)
-        {
-            super(owner, "More Candidates?", true);
+    setSize(300, 500);
 
-            setSize(300, 500);
+    buildUI(ballot);
 
-            buildUI(ballot);
+    final AddDialog bf = this;
 
-            final AddDialog bf = this;
+    addWindowListener(
+        new WindowAdapter() {
+          public void windowClosing(WindowEvent e) {
+            int result =
+                JOptionPane.showConfirmDialog(
+                    bf,
+                    "Are you done adding candidates?",
+                    "Confirm",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
 
-            addWindowListener(
-                    new WindowAdapter()
-                    {
-                        public void windowClosing(WindowEvent e)
-                        {
-                            int result = JOptionPane.showConfirmDialog(bf,
-                                    "Are you done adding candidates?",
-                                    "Confirm",
-                                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (result == JOptionPane.YES_OPTION) {
+              dispose();
+            }
+          }
+        });
 
-                            if (result == JOptionPane.YES_OPTION)
-                            {
-                                dispose();
-                            }
-                        }
-                    });
+    setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+  }
 
-            setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        }
+  private void buildUI(Ballot ballot) {
+    getContentPane().removeAll();
 
-        JTextField txtInput = new JTextField("");
+    GridBagLayout contentLayout = new GridBagLayout();
+    setLayout(contentLayout);
 
-        private void buildUI(Ballot ballot)
-        {
-            getContentPane().removeAll();
+    JButton addB = new JButton("Add Candidate?");
+    addB.addActionListener(
+        new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            String name = javax.swing.JOptionPane.showInputDialog("What is the candidate's name?");
+            String office = javax.swing.JOptionPane.showInputDialog("What is candidate's office?");
 
-            GridBagLayout contentLayout = new GridBagLayout();
-            setLayout(contentLayout);
+            JFrame frame = new JFrame("JOptionPane showMessageDialog example");
+            if (Objects.equals(name, "") || Objects.equals(office, "")) {
+              JOptionPane.showMessageDialog(
+                  frame,
+                  "Invalid name or office",
+                  "Please enter valid name and office",
+                  JOptionPane.ERROR_MESSAGE);
+            }
+            addButton(name, office, ballot);
+          }
+        });
+    add(addB);
+    contentLayout.setConstraints(
+        addB,
+        new GridBagConstraints(
+            0,
+            2,
+            1,
+            1,
+            0.0,
+            0.0,
+            GridBagConstraints.EAST,
+            GridBagConstraints.NONE,
+            new Insets(5, 5, 5, 5),
+            0,
+            0));
+  }
 
+  private void addButton(String name, String office, Ballot ballot) {
 
-            JButton addB = new JButton("Add Candidate?");
-            addB.addActionListener(
-                    new ActionListener()
-                    {
-                        public void actionPerformed(ActionEvent e)
-                        {
-                            String name = javax.swing.JOptionPane.showInputDialog("What is the candidate's name?");
-                            String office = javax.swing.JOptionPane.showInputDialog("What is candidate's office?");
-                            addButton(name, office, ballot);
-                        }
-                    });
-            add(addB);
-            contentLayout.setConstraints(
-                    addB,
-                    new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
-                            GridBagConstraints.EAST, GridBagConstraints.NONE,
-                            new Insets(5, 5, 5, 5), 0, 0));
+    Candidate c = new Candidate(name, office);
+    if (!name.equals("") && !office.equals("")) {
 
+      int result =
+          JOptionPane.showConfirmDialog(
+              this,
+              "You added a new candidate:\n   "
+                  + c.getName()
+                  + " - "
+                  + c.getAffiliation()
+                  + "\nAre you sure?",
+              "Confirm",
+              JOptionPane.OK_CANCEL_OPTION,
+              JOptionPane.QUESTION_MESSAGE);
 
+      if (result == JOptionPane.OK_OPTION) {
+        ballot.addCandidate(c);
 
-
-
+        JOptionPane.showMessageDialog(
+            this, "Candidate added", "Done", JOptionPane.INFORMATION_MESSAGE);
+      }
     }
-
-    private void addButton(String name, String office, Ballot ballot) {
-
-
-        Candidate c = new Candidate(name, office)   ;
-
-        int result = JOptionPane.showConfirmDialog(this,
-                "You added a new candidate:\n   " + c.getName()
-                        + " - " + c.getAffiliation() + "\nAre you sure?",
-                "Confirm",
-                JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-        if (result == JOptionPane.OK_OPTION)
-        {
-            ballot.addCandidate(c);
-
-
-            JOptionPane.showMessageDialog(this,
-                    "Candidate added",
-                    "Done",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
+  }
 }
